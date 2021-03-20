@@ -41,7 +41,8 @@ function setRenderer(w, h) {
 
 function setCamera(ratio) {
     camera = new THREE.PerspectiveCamera(40, ratio, 1, 10000);
-    camera.position.set(-5.17, 7.44, 28.93);
+    //camera.position.set(-5.17, 7.44, 28.93);
+    camera.position.set(16.69, 6.48, 26.37);
 }
 
 function setControls() {
