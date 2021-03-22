@@ -86,6 +86,6 @@ radRng.addEventListener("input", () => {
     params.rad = val;
 
     radLbl.innerText = `${radLbl.innerText.split(":")[0]}: ${val}`;
-t
+
     addProteinToScene( scene )
 })

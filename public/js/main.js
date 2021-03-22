@@ -54,6 +54,13 @@ function setControls() {
     cameraControls.target.set(2.24, 0.03, 0.15);
 }
 
+function loadTextures() {    
+    // set static textures
+    for (let name in params.tex) {
+        params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}.png`);
+    }
+}
+
 function init() {
     skyTexture = getSkybox();
 
@@ -64,6 +71,7 @@ function init() {
     setRenderer(canvasWidth, canvasHeight);
     setCamera(canvasRatio);
     setControls();
+    loadTextures();
 }
 
 function addToDOM() {

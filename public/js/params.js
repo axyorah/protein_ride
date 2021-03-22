@@ -1,5 +1,5 @@
 const params = {
-    'scale': 1.,
+    'scale': 2.9,
     'xPos': 0.,
     'yPos': 0.,
     'zPos': 0.,
@@ -8,5 +8,11 @@ const params = {
     'zRot': 0.,
     'rad': 0.5,
     'unitVec': undefined,
-    'unitLen': undefined
+    'unitLen': undefined,
+    'tex': { 
+        '1': undefined, 
+        '0': undefined,
+        'sq90': undefined
+    }
 }
+    
