@@ -4,7 +4,7 @@ const container = document.querySelector("#container");
 
 function fillScene() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0x808080, 200, 400);
+    scene.fog = new THREE.Fog(0xA01090, 200, 400);
 
     // LIGHTS
     const ambientLight = new THREE.AmbientLight(0x222222);
@@ -30,6 +30,9 @@ function fillScene() {
 
     // TEXT
     addTextToScene(scene);
+
+    // PROTEIN
+    addProteinToScene(scene);
 }
 
 function setRenderer(w, h) {
@@ -42,7 +45,8 @@ function setRenderer(w, h) {
 function setCamera(ratio) {
     camera = new THREE.PerspectiveCamera(40, ratio, 1, 10000);
     //camera.position.set(-5.17, 7.44, 28.93);
-    camera.position.set(16.69, 6.48, 26.37);
+    //camera.position.set(16.69, 6.48, 26.37);
+    camera.position.set(16.19, 8.65, 33.98);
 }
 
 function setControls() {
