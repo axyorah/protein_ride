@@ -23,7 +23,8 @@ function getTriangle() {
 function addTextToScene( scene ) {
     const loader = new THREE.GLTFLoader();
 
-    loader.load( '../blender/mads-scientist-with-triangle-1.glb', function ( gltf ) {
+    loader.load( '../blender/mads-scientist-with-triangle-0.glb', function ( gltf ) {
+        gltf.scene.position.set(0, 4.6, 0);
         scene.add( gltf.scene );    
     }, undefined, function ( error ) {    
         console.error( error );    
