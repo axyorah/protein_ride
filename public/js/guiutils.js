@@ -15,8 +15,11 @@ const yRotLbl = document.querySelector('#rot-y-lbl');
 const zRotRng = document.querySelector('#rot-z');
 const zRotLbl = document.querySelector('#rot-z-lbl');
 
-const radRng = document.querySelector('#rad');
-const radLbl = document.querySelector('#rad-lbl');
+const radRng = document.querySelector('#rad-strand');
+const radLbl = document.querySelector('#rad-strand-lbl');
+const numStrandsRng = document.querySelector('#num-strands');
+const numStrandsLbl = document.querySelector('#num-strands-lbl');
+
 
 scaleRng.addEventListener("input", () => {
     const val = parseFloat(scaleRng.value);
@@ -88,4 +91,12 @@ radRng.addEventListener("input", () => {
     radLbl.innerText = `${radLbl.innerText.split(":")[0]}: ${val}`;
 
     addProteinToScene( scene )
+})
+
+numStrandsRng.addEventListener("input", () => {
+    const val = parseInt(numStrandsRng.value);
+    params.numStrands = val;
+
+    numStrandsLbl.innerText = `${numStrandsLbl.innerText.split(":")[0]}: ${val}`;
+    addProteinToScene( scene );
 })

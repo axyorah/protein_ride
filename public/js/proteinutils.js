@@ -96,7 +96,9 @@ function populateProteinTubeWithNTypesOfEle( protein, eles ) {
 
         const res = Math.round(Math.abs((helixCenters[i][0] + helixCenters[i][1] + helixCenters[i][2]))) % eles.length;
         vertices[res].push(...[x1,y1,z1]);
-        //vertices[res].push(...[x2,y2,z2]);
+        if ( params.numStrands === 2 ) {
+            vertices[res].push(...[x2,y2,z2]);
+        }        
     }
 
     for (let i = 0; i < eles.length; i++) {
