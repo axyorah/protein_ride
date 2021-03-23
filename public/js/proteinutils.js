@@ -10,6 +10,31 @@ function setUnitLen() {
         params.unitVec[2] * params.unitVec[2];
 }
 
+function getSpherePrimitive( color ) {
+    color = (color === undefined) ? 0x6723F7 : color;
+
+    const rad = params.unitLen * params.scale * 0.007; // radius of a 'building block' sphere
+    const sphereGeometry = new THREE.SphereGeometry(rad, 8, 8);
+    const sphereMaterial = new THREE.MeshPhongMaterial( { shininess: 4 } );
+	sphereMaterial.color.setHex( color );
+	sphereMaterial.specular.setRGB( 0.5, 0.5, 0.5 );
+    return new THREE.Mesh(sphereGeometry, sphereMaterial);
+}
+
+function getParticlePrimitive( texture ) {
+    texture = (texture === undefined) ? params.tex['0'] : texture;
+
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleMaterial = new THREE.PointsMaterial({ 
+        size: params.unitLen * params.scale * 0.017, 
+        sizeAttenuation: true, 
+        map: texture,
+        transparent: true 
+    });
+    particleMaterial.color.setHSL( 0.35, 0.1, 0.9 );
+    return new THREE.Points( particleGeometry, particleMaterial );
+}
+
 function populateMainProteinChain( protein, ele ) {
     const proteinMain = paths['objPath'];
 
@@ -47,7 +72,7 @@ function populateProteinTube( protein, ele ) {
     protein.add(particles);
 }
 
-function populateProteinTubeWithNTylesOfEle( protein, eles ) {
+function populateProteinTubeWithNTypesOfEle( protein, eles ) {
     const helixCenters = paths['helixCenters'];     
     const helixNormals = paths['helixNormals'];
 
@@ -60,13 +85,20 @@ function populateProteinTubeWithNTylesOfEle( protein, eles ) {
         const xyz = helixCenters[i];
         const n = helixNormals[i];
         
-        const x = params.scale * (xyz[0] + n[0] * params.rad);
-        const y = params.scale * (xyz[1] + n[1] * params.rad);
-        const z = params.scale * (xyz[2] + n[2] * params.rad);
+        // make a double helix tube around the main chain
+        const x1 = params.scale * (xyz[0] + n[0] * params.rad);
+        const y1 = params.scale * (xyz[1] + n[1] * params.rad);
+        const z1 = params.scale * (xyz[2] + n[2] * params.rad);
+
+        const x2 = params.scale * (xyz[0] - n[0] * params.rad);
+        const y2 = params.scale * (xyz[1] - n[1] * params.rad);
+        const z2 = params.scale * (xyz[2] - n[2] * params.rad);
 
         const res = Math.round(Math.abs((helixCenters[i][0] + helixCenters[i][1] + helixCenters[i][2]))) % eles.length;
-        vertices[res].push(...[x,y,z]);
+        vertices[res].push(...[x1,y1,z1]);
+        //vertices[res].push(...[x2,y2,z2]);
     }
+
     for (let i = 0; i < eles.length; i++) {
         eles[i].geometry.setAttribute(
             'position', 
@@ -77,31 +109,6 @@ function populateProteinTubeWithNTylesOfEle( protein, eles ) {
         particles.name = 'Particles';
         protein.add(particles);
     }
-}
-
-function getSpherePrimitive( color ) {
-    color = (color === undefined) ? 0x6723F7 : color;
-
-    const rad = params.unitLen * params.scale * 0.007; // radius of a 'building block' sphere
-    const sphereGeometry = new THREE.SphereGeometry(rad, 8, 8);
-    const sphereMaterial = new THREE.MeshPhongMaterial( { shininess: 4 } );
-	sphereMaterial.color.setHex( color );
-	sphereMaterial.specular.setRGB( 0.5, 0.5, 0.5 );
-    return new THREE.Mesh(sphereGeometry, sphereMaterial);
-}
-
-function getParticlePrimitive( texture ) {
-    texture = (texture === undefined) ? params.tex['0'] : texture;
-
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleMaterial = new THREE.PointsMaterial({ 
-        size: params.unitLen * params.scale * 0.06, 
-        sizeAttenuation: true, 
-        map: texture,
-        transparent: true 
-    });
-    particleMaterial.color.setHSL( 0.35, 0.1, 0.9 );
-    return new THREE.Points( particleGeometry, particleMaterial );
 }
 
 function addProteinToScene( scene ) {
@@ -124,9 +131,8 @@ function addProteinToScene( scene ) {
     let protein = new THREE.Object3D();
     protein.name = 'Protein';
 
-    populateMainProteinChain(protein, sphere);
-    //populateProteinTube(protein, particle0);
-    populateProteinTubeWithNTylesOfEle(protein, [particle0, particle1]);
+    // populateMainProteinChain(protein, sphere);
+    populateProteinTubeWithNTypesOfEle(protein, [particle0, particle1]);
 
     
     // adjust protein position/rotation
