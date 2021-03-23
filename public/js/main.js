@@ -1,13 +1,66 @@
-let camera, scene, renderer, cameraControls, skyTexture;
+let camera, cm, scene, renderer, cameraControls, skyTexture, ground;
 const clock = new THREE.Clock();
 const container = document.querySelector("#container");
 
+class CameraMotion {
+    constructor(camera, cameraControls, deltaTime) {
+        this.camera = camera;
+        this.cameraControls = cameraControls;
+        this.deltaTime = deltaTime === undefined ? 0.1 : deltaTime;
+        this.time = 0;
+        this.idx = 0;
+        this.on = false;
+    }
+
+    start() {
+        this.on = true;
+        this.idx = 0;
+        this.time = 0;
+        this.move();
+    }
+
+    stop() {
+        this.on = false;
+    }
+
+    restart() {
+        this.on = true;
+        this.move(0);
+    }
+
+    move(delta) {
+        if (!this.on) {
+            return;
+        }
+
+        const skip = 2;
+        this.time += delta; //this.time > this.deltaTime && 
+
+        if (!(this.idx % skip) && this.idx / skip < paths.helixCenters.length - 10) {
+            const i = this.idx / skip;
+            this.time -= this.deltaTime;
+
+            const xc = paths.helixCenters[i][0] * params.scale;
+            const yc = paths.helixCenters[i][1] * params.scale;
+            const zc = paths.helixCenters[i][2] * params.scale;
+
+            const xt = paths.helixCenters[i + 10][0] * params.scale;
+            const yt = paths.helixCenters[i + 10][1] * params.scale;
+            const zt = paths.helixCenters[i + 10][2] * params.scale;
+
+            this.camera.position.set(...[xc, yc, zc]);
+            this.cameraControls.target.set(...[xt, yt, zt]);
+        }
+        this.idx += 1;
+    }
+}
+
 function fillScene() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0xA01090, 200, 400);
+    scene.fog = new THREE.Fog(0xA01090, 50, 250);
 
     // LIGHTS
-    const ambientLight = new THREE.AmbientLight(0x222222);
+    const ambientLight = new THREE.AmbientLight(0x881188);
 
     const light1 = new THREE.DirectionalLight(0xffffff, 1);
     light1.position.set(-500, 0, 500);
@@ -25,7 +78,6 @@ function fillScene() {
     scene.background = skyTexture;
 
     // GROUND
-    const ground = getGrid();
     scene.add(ground);
 
     // TEXT
@@ -42,8 +94,8 @@ function setRenderer(w, h) {
     renderer.setClearColorHex;
 }
 
-function setCamera(ratio) {
-    camera = new THREE.PerspectiveCamera(40, ratio, 1, 10000);
+function setCamera(width, height) {
+    camera = new THREE.PerspectiveCamera(100, width / height, 1, 10000);
     //camera.position.set(-5.17, 7.44, 28.93);
     //camera.position.set(16.69, 6.48, 26.37);
     camera.position.set(16.19, 8.65, 33.98);
@@ -57,21 +109,34 @@ function setControls() {
 function loadTextures() {    
     // set static textures
     for (let name in params.tex) {
-        params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}.png`);
+        params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}.png`);    
     }
 }
 
+// async function loadBlenderModels() {
+//     console.log('loading blender models');
+//     const loader = new THREE.GLTFLoader();
+
+//     await loader.load( '../blender/mads-scientist-with-triangle-0.glb', async (gltf) => {
+//         blenderText = await gltf;
+//         console.log('inner', gltf);
+//     });
+//     console.log('outer', blenderText)
+// }
+
 function init() {
     skyTexture = getSkybox();
+    ground = getGrid();
 
     const canvasWidth = window.innerWidth;
     const canvasHeight = window.innerHeight;
-    const canvasRatio = canvasWidth / canvasHeight;
 
     setRenderer(canvasWidth, canvasHeight);
-    setCamera(canvasRatio);
+    setCamera(canvasWidth, canvasHeight);
     setControls();
     loadTextures();
+
+    cm = new CameraMotion(camera, cameraControls);
 }
 
 function addToDOM() {
@@ -85,8 +150,11 @@ function addToDOM() {
 
 function render() {
 
-    let delta = clock.getDelta();
+    const delta = clock.getDelta();
     cameraControls.update(delta);
+
+    cm.on = true;
+    cm.move(delta);
 
     renderer.render(scene, camera);
 }

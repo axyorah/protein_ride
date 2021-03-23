@@ -1,5 +1,5 @@
 const params = {
-    'scale': 2.9,
+    'scale': 4,
     'xPos': 0.,
     'yPos': 0.,
     'zPos': 0.,
@@ -7,6 +7,7 @@ const params = {
     'yRot': 0.,
     'zRot': 0.,
     'rad': 0.5,
+    'numStrands': 1,
     'unitVec': undefined,
     'unitLen': undefined,
     'tex': { 
