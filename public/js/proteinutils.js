@@ -31,8 +31,6 @@ function populateProteinTube( protein, ele ) {
 
     const vertices = []
     for (let i = 0; i < helixCenters.length; i++) {
-        //const sphere = new THREE.Mesh(ele.geometry, ele.material);
-
         const xyz = helixCenters[i];
         const n = helixNormals[i];
         
@@ -40,14 +38,8 @@ function populateProteinTube( protein, ele ) {
         const y = params.scale * (xyz[1] + n[1] * params.rad);
         const z = params.scale * (xyz[2] + n[2] * params.rad);
         
-        //sphere.position.set(x, y, z);
-        //protein.add(sphere);
         vertices.push(...[x,y,z]);
     }
-
-    //const geometry = new THREE.BufferGeometry();
-    //geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-
     ele.geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 
     const particles = new THREE.Points( ele.geometry, ele.material );
@@ -55,21 +47,57 @@ function populateProteinTube( protein, ele ) {
     protein.add(particles);
 }
 
-function getSpherePrimitive() {
+function populateProteinTubeWithNTylesOfEle( protein, eles ) {
+    const helixCenters = paths['helixCenters'];     
+    const helixNormals = paths['helixNormals'];
+
+    let vertices = []
+    for (let i = 0; i < eles.length; i++) {
+        vertices.push([]);
+    }
+
+    for (let i = 0; i < helixCenters.length; i++) {
+        const xyz = helixCenters[i];
+        const n = helixNormals[i];
+        
+        const x = params.scale * (xyz[0] + n[0] * params.rad);
+        const y = params.scale * (xyz[1] + n[1] * params.rad);
+        const z = params.scale * (xyz[2] + n[2] * params.rad);
+
+        const res = Math.round(Math.abs((helixCenters[i][0] + helixCenters[i][1] + helixCenters[i][2]))) % eles.length;
+        vertices[res].push(...[x,y,z]);
+    }
+    for (let i = 0; i < eles.length; i++) {
+        eles[i].geometry.setAttribute(
+            'position', 
+            new THREE.Float32BufferAttribute(vertices[i], 3)
+        );
+
+        const particles = new THREE.Points( eles[i].geometry, eles[i].material );
+        particles.name = 'Particles';
+        protein.add(particles);
+    }
+}
+
+function getSpherePrimitive( color ) {
+    color = (color === undefined) ? 0x6723F7 : color;
+
     const rad = params.unitLen * params.scale * 0.007; // radius of a 'building block' sphere
     const sphereGeometry = new THREE.SphereGeometry(rad, 8, 8);
     const sphereMaterial = new THREE.MeshPhongMaterial( { shininess: 4 } );
-	sphereMaterial.color.setHex( 0x6723F7 );
+	sphereMaterial.color.setHex( color );
 	sphereMaterial.specular.setRGB( 0.5, 0.5, 0.5 );
     return new THREE.Mesh(sphereGeometry, sphereMaterial);
 }
 
-function getParticlePrimitive() {
+function getParticlePrimitive( texture ) {
+    texture = (texture === undefined) ? params.tex['0'] : texture;
+
     const particleGeometry = new THREE.BufferGeometry();
     const particleMaterial = new THREE.PointsMaterial({ 
         size: params.unitLen * params.scale * 0.06, 
         sizeAttenuation: true, 
-        map: params.tex['sq90'], 
+        map: texture,
         transparent: true 
     });
     particleMaterial.color.setHSL( 0.35, 0.1, 0.9 );
@@ -81,7 +109,8 @@ function addProteinToScene( scene ) {
     setUnitLen();
 
     const sphere = getSpherePrimitive();
-    const particle = getParticlePrimitive();
+    const particle0 = getParticlePrimitive( params.tex['0']);
+    const particle1 = getParticlePrimitive( params.tex['1']);
 
     // delete old protein if present
     for (let i=0; i < scene.children.length; i++) {
@@ -96,7 +125,9 @@ function addProteinToScene( scene ) {
     protein.name = 'Protein';
 
     populateMainProteinChain(protein, sphere);
-    populateProteinTube(protein, particle);    
+    //populateProteinTube(protein, particle0);
+    populateProteinTubeWithNTylesOfEle(protein, [particle0, particle1]);
+
     
     // adjust protein position/rotation
     protein.rotation.set(params.xRot, params.yRot, params.zRot);
