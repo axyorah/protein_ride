@@ -152,8 +152,6 @@ function render() {
 
     const delta = clock.getDelta();
     cameraControls.update(delta);
-
-    cm.on = true;
     cm.move(delta);
 
     renderer.render(scene, camera);

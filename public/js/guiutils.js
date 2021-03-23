@@ -20,6 +20,10 @@ const radLbl = document.querySelector('#rad-strand-lbl');
 const numStrandsRng = document.querySelector('#num-strands');
 const numStrandsLbl = document.querySelector('#num-strands-lbl');
 
+const playBtn = document.querySelector('#button_start');
+const pauseBtn = document.querySelector('#button_stop');
+const restartBtn = document.querySelector('#button_restart');
+
 
 scaleRng.addEventListener("input", () => {
     const val = parseFloat(scaleRng.value);
@@ -99,4 +103,16 @@ numStrandsRng.addEventListener("input", () => {
 
     numStrandsLbl.innerText = `${numStrandsLbl.innerText.split(":")[0]}: ${val}`;
     addProteinToScene( scene );
+})
+
+playBtn.addEventListener("click", () => {
+    cm.start();
+})
+
+pauseBtn.addEventListener("click", () => {
+    cm.stop();
+})
+
+restartBtn.addEventListener("click", () => {
+    cm.restart();
 })
