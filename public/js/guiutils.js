@@ -116,3 +116,25 @@ pauseBtn.addEventListener("click", () => {
 restartBtn.addEventListener("click", () => {
     cm.restart();
 })
+
+document.addEventListener("keydown", (evt) => {
+    const xyzCam = camera.position;
+    const xyzTar = cameraControls.target;
+    
+    const delta = new THREE.Vector3(
+        xyzTar.x - xyzCam.x, xyzTar.y - xyzCam.y, xyzTar.z - xyzCam.z
+    ).normalize().multiplyScalar(0.5);
+    
+    if ( evt.code === 'KeyS' ) {
+        delta.multiplyScalar(-1);
+    } else if ( evt.code === 'KeyA' ) {
+        delta.applyAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
+    } else if ( evt.code === 'KeyD' ) {
+        delta.applyAxisAngle(new THREE.Vector3(0,1,0), -Math.PI/2);
+    }
+
+    if ( evt.code === 'KeyW' || evt.code === 'KeyS' || evt.code === 'KeyA' || evt.code === 'KeyD' ) {
+        camera.position.add(delta);
+        cameraControls.target.add(delta);
+    }
+})
