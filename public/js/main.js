@@ -10,13 +10,26 @@ class CameraMotion {
         this.time = 0;
         this.idx = 0;
         this.on = false;
+
+        this.connecting = false;
+        this.connectSpeed = 0.1; // [dist units / second]
+        this.connectTime = 0; // [second]
+        this.connectDelta = 0.0001; // [dist units]
+        this.startPos = undefined; // Vector3
+        this.startDir = undefined; // Vector3
+        this.endPos = new THREE.Vector3(...paths.helixCenters[0])
+            .multiplyScalar(params.scale)
+            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
+        this.endTar = new THREE.Vector3(...paths.helixCenters[10])
+            .multiplyScalar(params.scale)
+            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
     }
 
     start() {
         this.on = true;
         this.idx = 0;
         this.time = 0;
-        this.move();
+        this.move(clock.getDelta());
     }
 
     stop() {
@@ -25,13 +38,50 @@ class CameraMotion {
 
     restart() {
         this.on = true;
-        this.move(0);
+        this.move(clock.getDelta());
+
+        // TODO: add smoothing connection
+    }
+
+    connect(delta) {
+        // const currDir = this.cameraControls.target
+        //     .clone()
+        //     .add(this.camera.position.multiplyScalar(-1));
+        if (!this.on) {
+            return
+        }
+        if (!this.connecting) {
+            this.connecting = true;
+            this.startPos = this.camera.position;
+            this.startTar = this.cameraControls.target;
+            this.endPos = new THREE.Vector3(...paths.helixCenters[this.idx])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
+            this.endTar = new THREE.Vector3(...paths.helixCenters[this.idx + 10])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
+        }
+        if (this.camera.position.distanceTo(this.endPos) < this.connectDelta) {
+            this.connecting = false;
+            this.connectTime = 0;
+            return;
+        }
+
+        this.connectTime += delta;
+        const alpha = Math.min(1, this.connectTime * this.connectSpeed / this.startPos.distanceTo(this.endPos));
+        this.camera.position.lerp(this.endPos, alpha);
+        this.cameraControls.target.lerp(this.endTar, alpha);
     }
 
     move(delta) {
         if (!this.on) {
             return;
         }
+        if (this.idx === 0 && this.camera.position.distanceTo(this.endPos) > this.connectDelta) {
+           return this.connect(delta); //this.idx === 0 && 
+        }
+
+        // TODO: add connection when restarting
 
         const skip = 2;
         this.time += delta; //this.time > this.deltaTime && 
