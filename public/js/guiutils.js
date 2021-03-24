@@ -106,7 +106,7 @@ numStrandsRng.addEventListener("input", () => {
 })
 
 playBtn.addEventListener("click", () => {
-    cm.start();
+    cm.restart();
 })
 
 pauseBtn.addEventListener("click", () => {
@@ -114,16 +114,19 @@ pauseBtn.addEventListener("click", () => {
 })
 
 restartBtn.addEventListener("click", () => {
-    cm.restart();
+    cm.start();
 })
 
 document.addEventListener("keydown", (evt) => {
+    const step = 0.5;
+    console.log(evt)
+
     const xyzCam = camera.position;
     const xyzTar = cameraControls.target;
     
     const delta = new THREE.Vector3(
         xyzTar.x - xyzCam.x, xyzTar.y - xyzCam.y, xyzTar.z - xyzCam.z
-    ).normalize().multiplyScalar(0.5);
+    ).normalize().multiplyScalar(step);
     
     if ( evt.code === 'KeyS' ) {
         delta.multiplyScalar(-1);
@@ -131,9 +134,18 @@ document.addEventListener("keydown", (evt) => {
         delta.applyAxisAngle(new THREE.Vector3(0,1,0), Math.PI/2);
     } else if ( evt.code === 'KeyD' ) {
         delta.applyAxisAngle(new THREE.Vector3(0,1,0), -Math.PI/2);
+    } else if ( evt.code === 'KeyQ' ) {
+        delta.applyAxisAngle(new THREE.Vector3(0,1,0), Math.PI/4);
+    } else if ( evt.code === 'KeyE' ) {
+        delta.applyAxisAngle(new THREE.Vector3(0,1,0), -Math.PI/4);
     }
 
-    if ( evt.code === 'KeyW' || evt.code === 'KeyS' || evt.code === 'KeyA' || evt.code === 'KeyD' ) {
+    if ( evt.code === 'KeyW' || 
+         evt.code === 'KeyS' || 
+         evt.code === 'KeyA' || 
+         evt.code === 'KeyD' || 
+         evt.code === 'KeyQ' ||
+         evt.code === 'KeyE' ) {
         camera.position.add(delta);
         cameraControls.target.add(delta);
     }
