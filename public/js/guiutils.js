@@ -49,7 +49,7 @@ yPosRng.addEventListener("input", () => {
     const val = parseFloat(yPosRng.value);
     params.yPos = val;
 
-    xPosLbl.innerText = `${yPosLbl.innerText.split(":")[0]}: ${val}`;
+    yPosLbl.innerText = `${yPosLbl.innerText.split(":")[0]}: ${val}`;
 
     addProteinToScene( scene )
 })
