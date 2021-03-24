@@ -3,13 +3,14 @@ const clock = new THREE.Clock();
 const container = document.querySelector("#container");
 
 class CameraMotion {
-    constructor(camera, cameraControls, deltaTime) {
+    constructor(camera, cameraControls) {
         this.camera = camera;
         this.cameraControls = cameraControls;
-        this.deltaTime = deltaTime === undefined ? 0.1 : deltaTime;
         this.time = 0;
         this.idx = 0;
         this.on = false;
+
+        this.skip = 2; // skip some frames to regulate speed
 
         this.connecting = false;
         this.connectSpeed = 0.1; // [dist units / second]
@@ -17,19 +18,28 @@ class CameraMotion {
         this.connectDelta = 0.0001; // [dist units]
         this.startPos = undefined; // Vector3
         this.startDir = undefined; // Vector3
-        this.endPos = new THREE.Vector3(...paths.helixCenters[0])
-            .multiplyScalar(params.scale)
-            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
-        this.endTar = new THREE.Vector3(...paths.helixCenters[10])
-            .multiplyScalar(params.scale)
-            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
+        // this.endPos = new THREE.Vector3(...paths.helixCenters[0])
+        //     .multiplyScalar(params.scale)
+        //     .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
+        // this.endTar = new THREE.Vector3(...paths.helixCenters[10])
+        //     .multiplyScalar(params.scale)
+        //     .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // Vector3 // TODO: rotation
     }
 
     start() {
         this.on = true;
         this.idx = 0;
         this.time = 0;
-        this.move(clock.getDelta());
+        
+        this.setConnectionEndpoint(
+            new THREE.Vector3(...paths.helixCenters[0])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)), 
+            new THREE.Vector3(...paths.helixCenters[10])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        );
+        this.connect(clock.getDelta());
     }
 
     stop() {
@@ -38,15 +48,24 @@ class CameraMotion {
 
     restart() {
         this.on = true;
-        this.move(clock.getDelta());
+        
+        this.setConnectionEndpoint(
+            new THREE.Vector3(...paths.helixCenters[this.idx / this.skip])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)),
+            new THREE.Vector3(...paths.helixCenters[this.idx / this.skip + 10])
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        );
+        this.connect(clock.getDelta());
+    }
 
-        // TODO: add smoothing connection
+    setConnectionEndpoint(position, target) {
+        this.endPos = position;
+        this.endTar = target;
     }
 
     connect(delta) {
-        // const currDir = this.cameraControls.target
-        //     .clone()
-        //     .add(this.camera.position.multiplyScalar(-1));
         if (!this.on) {
             return
         }
@@ -54,12 +73,12 @@ class CameraMotion {
             this.connecting = true;
             this.startPos = this.camera.position;
             this.startTar = this.cameraControls.target;
-            this.endPos = new THREE.Vector3(...paths.helixCenters[this.idx])
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
-            this.endTar = new THREE.Vector3(...paths.helixCenters[this.idx + 10])
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
+            // this.endPos = new THREE.Vector3(...paths.helixCenters[this.idx])
+            //     .multiplyScalar(params.scale)
+            //     .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
+            // this.endTar = new THREE.Vector3(...paths.helixCenters[this.idx + 10])
+            //     .multiplyScalar(params.scale)
+            //     .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)); // TODO: rotation
         }
         if (this.camera.position.distanceTo(this.endPos) < this.connectDelta) {
             this.connecting = false;
@@ -77,18 +96,15 @@ class CameraMotion {
         if (!this.on) {
             return;
         }
-        if (this.idx === 0 && this.camera.position.distanceTo(this.endPos) > this.connectDelta) {
-           return this.connect(delta); //this.idx === 0 && 
+
+        //this.time += delta;  
+
+        if (this.connecting) {
+            return this.connect(delta);
         }
 
-        // TODO: add connection when restarting
-
-        const skip = 2;
-        this.time += delta; //this.time > this.deltaTime && 
-
-        if (!(this.idx % skip) && this.idx / skip < paths.helixCenters.length - 10) {
-            const i = this.idx / skip;
-            this.time -= this.deltaTime;
+        if (!(this.idx % this.skip) && this.idx / this.skip < paths.helixCenters.length - 10) {
+            const i = this.idx / this.skip;            
 
             const xc = paths.helixCenters[i][0] * params.scale + params.xPos;
             const yc = paths.helixCenters[i][1] * params.scale + params.yPos;
@@ -163,17 +179,6 @@ function loadTextures() {
         params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}.png`);    
     }
 }
-
-// async function loadBlenderModels() {
-//     console.log('loading blender models');
-//     const loader = new THREE.GLTFLoader();
-
-//     await loader.load( '../blender/mads-scientist-with-triangle-0.glb', async (gltf) => {
-//         blenderText = await gltf;
-//         console.log('inner', gltf);
-//     });
-//     console.log('outer', blenderText)
-// }
 
 function init() {
     skyTexture = getSkybox();
