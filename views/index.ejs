@@ -51,7 +51,7 @@
             <label for="pos-z" id="pos-z-lbl">Z:</label>
             <input type="range" min="-30" max="30" step="1" value="0" id="pos-z" name="pos-z">
         </div>
-        <div id="rotation" class="gui-box">
+        <div id="rotation" class="gui-box" style="display: none">
             <p><b>Rotation</b></p>
             <label for="rot-x" id="rot-x-lbl">X:</label>
             <input type="range" min="-180" max="180" step="1" value="0" id="rot-x" name="rot-x">
@@ -65,7 +65,9 @@
             <label for="num-strands" id="num-strands-lbl">Number of Strands</label>
             <input type="range" min="1" max="2" step="1" value="1" id="num-strands" name="num-strands">
             <label for="rad-strand" id="rad-strand-lbl">Relative Radius:</label>
-            <input type="range" min="0.1" max="2" step="0.05" value="0.5" id="rad-strand" name="rad-strand">            
+            <input type="range" min="0.1" max="2" step="0.05" value="0.5" id="rad-strand" name="rad-strand">
+            <label for="particle-size" id="particle-size-lbl">Particle Size</label>
+            <input type="range" min="0.01" max="0.05" step="0.001" value="0.017" id="particle-size" name="particle-size">
         </div>
     </div>
 

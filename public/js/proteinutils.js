@@ -26,7 +26,7 @@ function getParticlePrimitive( texture ) {
 
     const particleGeometry = new THREE.BufferGeometry();
     const particleMaterial = new THREE.PointsMaterial({ 
-        size: params.unitLen * params.scale * 0.017, 
+        size: params.unitLen * params.scale * params.particleSize, 
         sizeAttenuation: true, 
         map: texture,
         transparent: true 

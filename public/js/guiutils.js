@@ -19,6 +19,8 @@ const radRng = document.querySelector('#rad-strand');
 const radLbl = document.querySelector('#rad-strand-lbl');
 const numStrandsRng = document.querySelector('#num-strands');
 const numStrandsLbl = document.querySelector('#num-strands-lbl');
+const particleSizeRng = document.querySelector('#particle-size');
+const particleSizeLbl = document.querySelector('#particle-size-lbl');
 
 const playBtn = document.querySelector('#button_start');
 const pauseBtn = document.querySelector('#button_stop');
@@ -102,6 +104,14 @@ numStrandsRng.addEventListener("input", () => {
     params.numStrands = val;
 
     numStrandsLbl.innerText = `${numStrandsLbl.innerText.split(":")[0]}: ${val}`;
+    addProteinToScene( scene );
+})
+
+particleSizeRng.addEventListener("input", () => {
+    const val = parseFloat(particleSizeRng.value);
+    params.particleSize = val;
+
+    particleSizeLbl.innerText = `${particleSizeLbl.innerText.split(":")[0]}: ${val}`;
     addProteinToScene( scene );
 })
 
