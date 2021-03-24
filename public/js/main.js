@@ -98,7 +98,8 @@ function setCamera(width, height) {
     camera = new THREE.PerspectiveCamera(100, width / height, 1, 10000);
     //camera.position.set(-5.17, 7.44, 28.93);
     //camera.position.set(16.69, 6.48, 26.37);
-    camera.position.set(16.19, 8.65, 33.98);
+    //camera.position.set(16.19, 8.65, 33.98);
+    camera.position.set(2.27, 5.09, 77.07);
 }
 
 function setControls() {
