@@ -40,13 +40,13 @@ class CameraMotion {
             const i = this.idx / skip;
             this.time -= this.deltaTime;
 
-            const xc = paths.helixCenters[i][0] * params.scale;
-            const yc = paths.helixCenters[i][1] * params.scale;
-            const zc = paths.helixCenters[i][2] * params.scale;
+            const xc = paths.helixCenters[i][0] * params.scale + params.xPos;
+            const yc = paths.helixCenters[i][1] * params.scale + params.yPos;
+            const zc = paths.helixCenters[i][2] * params.scale + params.zPos;
 
-            const xt = paths.helixCenters[i + 10][0] * params.scale;
-            const yt = paths.helixCenters[i + 10][1] * params.scale;
-            const zt = paths.helixCenters[i + 10][2] * params.scale;
+            const xt = paths.helixCenters[i + 10][0] * params.scale + params.xPos;
+            const yt = paths.helixCenters[i + 10][1] * params.scale + params.yPos;
+            const zt = paths.helixCenters[i + 10][2] * params.scale + params.zPos;
 
             this.camera.position.set(...[xc, yc, zc]);
             this.cameraControls.target.set(...[xt, yt, zt]);
@@ -57,17 +57,17 @@ class CameraMotion {
 
 function fillScene() {
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(0xA01090, 50, 250);
+    scene.fog = new THREE.Fog(0xA01090, 10, 400);
 
     // LIGHTS
     const ambientLight = new THREE.AmbientLight(0x881188);
 
     const light1 = new THREE.DirectionalLight(0xffffff, 1);
-    light1.position.set(-500, 0, 500);
+    light1.position.set(-500, 100, 500);
     light1.castShadow = true;
 
     const light2 = new THREE.DirectionalLight(0xffffff, 0.6);
-    light2.position.set(0, 0, 500);
+    light2.position.set(0, 50, 500);
     light2.castShadow = true;
 
     scene.add(ambientLight);
