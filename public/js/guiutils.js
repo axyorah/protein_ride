@@ -116,15 +116,15 @@ particleSizeRng.addEventListener("input", () => {
 })
 
 playBtn.addEventListener("click", () => {
-    cm.restart();
+    cameraMotion.restart();
 })
 
 pauseBtn.addEventListener("click", () => {
-    cm.stop();
+    cameraMotion.stop();
 })
 
 restartBtn.addEventListener("click", () => {
-    cm.start();
+    cameraMotion.start();
 })
 
 document.addEventListener("keydown", (evt) => {

@@ -45,7 +45,7 @@ function populateMainProteinChain( protein, ele ) {
         const y = params.scale * xyz[1];
         const z = params.scale * xyz[2];
         
-        sphere.position.set(x, y, z);        
+        sphere.position.set(x, y, z);
         protein.add(sphere);
     }
 }
