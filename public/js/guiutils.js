@@ -139,7 +139,6 @@ restartBtn.addEventListener("click", () => {
 
 document.addEventListener("keydown", (evt) => {
     const step = 0.5;
-    console.log(evt)
 
     const xyzCam = camera.position;
     const xyzTar = cameraControls.target;

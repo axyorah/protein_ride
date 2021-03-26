@@ -28,7 +28,6 @@ function getParticlePrimitive( texture ) {
 }
 
 function populateMainProteinChain( protein, ele ) {
-    //const proteinMain = paths['objPath'];
     const proteinMain = paths.helixCenters;
 
     for (let xyz of proteinMain) {
@@ -44,8 +43,6 @@ function populateMainProteinChain( protein, ele ) {
 }
 
 function populateProteinTube( protein, ele ) {
-    // const helixCenters = paths['helixCenters'];
-    // const helixNormals = paths['helixNormals'];
     const helixCenters = paths.helixCenters;
     const helixNormals = paths.helixNormals;
 
