@@ -9,7 +9,7 @@ const params = {
     'zRot': 0.,
     'rad': 0.5,
     'numStrands': 1,
-    'particleSize': 0.05,
+    'particleSize': 0.07,
     'unitLen': undefined,
     'tex': { 
         '1.png': undefined, 
