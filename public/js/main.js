@@ -44,7 +44,7 @@ function setRenderer(w, h) {
 }
 
 function setCamera(width, height) {
-    camera = new THREE.PerspectiveCamera(100, width / height, 2, 1000);
+    camera = new THREE.PerspectiveCamera(100, width / height, 1, 1000);
     camera.position.set(2.27, 5.09, 77.07);
 }
 
