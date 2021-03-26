@@ -1,13 +1,5 @@
 function setUnitLen() {
-    params.unitVec = [
-        paths.alphaCarbons[0][0] - paths.alphaCarbons[1][0],
-        paths.alphaCarbons[0][1] - paths.alphaCarbons[1][1],
-        paths.alphaCarbons[0][2] - paths.alphaCarbons[1][2]
-    ];
-    params.unitLen = 
-        params.unitVec[0] * params.unitVec[0] + 
-        params.unitVec[1] * params.unitVec[1] + 
-        params.unitVec[2] * params.unitVec[2];
+    params.unitLen = paths.unitLen;
 }
 
 function getSpherePrimitive( color ) {
@@ -36,7 +28,8 @@ function getParticlePrimitive( texture ) {
 }
 
 function populateMainProteinChain( protein, ele ) {
-    const proteinMain = paths['objPath'];
+    //const proteinMain = paths['objPath'];
+    const proteinMain = paths.helixCenters;
 
     for (let xyz of proteinMain) {
         const sphere = new THREE.Mesh(ele.geometry, ele.material);
@@ -51,8 +44,10 @@ function populateMainProteinChain( protein, ele ) {
 }
 
 function populateProteinTube( protein, ele ) {
-    const helixCenters = paths['helixCenters'];     
-    const helixNormals = paths['helixNormals'];
+    // const helixCenters = paths['helixCenters'];
+    // const helixNormals = paths['helixNormals'];
+    const helixCenters = paths.helixCenters;
+    const helixNormals = paths.helixNormals;
 
     const vertices = []
     for (let i = 0; i < helixCenters.length; i++) {
@@ -73,8 +68,8 @@ function populateProteinTube( protein, ele ) {
 }
 
 function populateProteinTubeWithNTypesOfEle( protein, eles ) {
-    const helixCenters = paths['helixCenters'];     
-    const helixNormals = paths['helixNormals'];
+    const helixCenters = paths.helixCenters;
+    const helixNormals = paths.helixNormals;
 
     let vertices = []
     for (let i = 0; i < eles.length; i++) {
@@ -84,7 +79,7 @@ function populateProteinTubeWithNTypesOfEle( protein, eles ) {
     for (let i = 0; i < helixCenters.length; i++) {
         const xyz = helixCenters[i];
         const n = helixNormals[i];
-        
+                
         // make a double helix tube around the main chain
         const x1 = params.scale * (xyz[0] + n[0] * params.rad);
         const y1 = params.scale * (xyz[1] + n[1] * params.rad);
@@ -94,7 +89,8 @@ function populateProteinTubeWithNTypesOfEle( protein, eles ) {
         const y2 = params.scale * (xyz[1] - n[1] * params.rad);
         const z2 = params.scale * (xyz[2] - n[2] * params.rad);
 
-        const res = Math.round(Math.abs((helixCenters[i][0] + helixCenters[i][1] + helixCenters[i][2]))) % eles.length;
+
+        const res = Math.round(Math.abs((x1 + y1 + z1))) % eles.length;
         vertices[res].push(...[x1,y1,z1]);
         if ( params.numStrands === 2 ) {
             vertices[res].push(...[x2,y2,z2]);

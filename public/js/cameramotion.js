@@ -40,7 +40,7 @@ class CameraMotion {
 
     restart() {
         this.on = true;        
-        this.setConnectionEndpoint(this.pts[this.idx * this.skip], this.pts[this.idx * this.skip + 10]);
+        this.setConnectionEndpoint(this.pts[this.idx], this.pts[this.idx + 10]);
         this.connect(clock.getDelta());
     }
 
