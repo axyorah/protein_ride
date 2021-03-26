@@ -72,7 +72,14 @@ function init() {
     skyTexture = getSkybox();
     ground = getGrid();
 
-    cameraMotion = new CameraMotion(camera, cameraControls);
+    let pts = [];
+    for (let i = 0; i < paths.helixCenters.length; i++) {
+        pts.push(new THREE.Vector3(...paths.helixCenters[i])
+            .multiplyScalar(params.scale)
+            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        )
+    }
+    cameraMotion = new CameraMotion(camera, cameraControls, pts, pts.length * 5);
 }
 
 function addToDOM() {
