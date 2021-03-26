@@ -71,3 +71,11 @@ input[type="file"] {
     bottom: 20px;
     right: 20px;
 }
+
+#button_restart, #button_stop, #button_start {
+    opacity: 0.8;
+}
+
+#button_restart:hover, #button_stop:hover, #button_start:hover {
+    opacity: 1;
+}
