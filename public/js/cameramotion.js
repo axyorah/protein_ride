@@ -65,13 +65,13 @@ class CameraMotion {
         this.cameraControls.target.lerp(this.endTar, alpha);
     }
 
-    move(delta) {
+    move(delta, speed) {
         if (!this.on) {
             return;
         }
 
         //this.time += delta; 
-        this.skip = params.speed;
+        this.skip = speed === undefined ? this.skip : speed;
 
         if (this.connecting) {
             return this.connect(delta);

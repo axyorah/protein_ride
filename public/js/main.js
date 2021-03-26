@@ -95,7 +95,7 @@ function render() {
 
     const delta = clock.getDelta();
     cameraControls.update(delta);
-    cameraMotion.move(delta);
+    cameraMotion.move(delta, params.speed);
 
     renderer.render(scene, camera);
 }
