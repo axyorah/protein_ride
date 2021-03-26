@@ -30,7 +30,16 @@ class CameraMotion {
         this.on = true;
         this.idx = 0;
         this.time = 0;
-        this.setConnectionEndpoint(this.pts[0], this.pts[10]);
+        this.setConnectionEndpoint(
+            this.pts[0]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)), 
+            this.pts[10]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        );
         this.connect(clock.getDelta());
     }
 
@@ -39,8 +48,18 @@ class CameraMotion {
     }
 
     restart() {
+        console.log(this.pts[this.idx])
         this.on = true;        
-        this.setConnectionEndpoint(this.pts[this.idx], this.pts[this.idx + 10]);
+        this.setConnectionEndpoint(
+            this.pts[this.idx]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)), 
+            this.pts[this.idx + 10]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        );
         this.connect(clock.getDelta());
     }
 
@@ -80,8 +99,17 @@ class CameraMotion {
         if (this.idx + this.skip < this.pts.length - 10) {            
             this.idx += this.skip;
 
-            const xyzPos = this.pts[this.idx];
-            const xyzTar = this.pts[this.idx + 10];
+            //TODO: when scale/position/rotation is fixed - remove all on-the-fly coord adjustment
+            const xyzPos = this.pts[this.idx]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+            const xyzTar = this.pts[this.idx + 10]
+                .clone()
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+
+            console.log(xyzPos)
 
             this.camera.position.set(xyzPos.x, xyzPos.y, xyzPos.z);
             this.cameraControls.target.set(xyzTar.x, xyzTar.y, xyzTar.z);

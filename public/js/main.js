@@ -75,8 +75,8 @@ function init() {
     let pts = [];
     for (let i = 0; i < paths.helixCenters.length; i++) {
         pts.push(new THREE.Vector3(...paths.helixCenters[i])
-            .multiplyScalar(params.scale)
-            .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+            //.multiplyScalar(params.scale)
+            //.add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
         )
     }
     cameraMotion = new CameraMotion(camera, cameraControls, pts, pts.length * 5);
