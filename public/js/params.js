@@ -12,9 +12,9 @@ const params = {
     'particleSize': 0.05,
     'unitLen': undefined,
     'tex': { 
-        '1': undefined, 
-        '0': undefined,
-        'sq90': undefined
+        '1.png': undefined, 
+        '0.png': undefined,
+        'sq90.png': undefined
     }
 }
     

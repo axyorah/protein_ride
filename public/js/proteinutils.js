@@ -14,7 +14,7 @@ function getSpherePrimitive( color ) {
 }
 
 function getParticlePrimitive( texture ) {
-    texture = (texture === undefined) ? params.tex['0'] : texture;
+    texture = (texture === undefined) ? params.tex['0.png'] : texture;
 
     const particleGeometry = new THREE.BufferGeometry();
     const particleMaterial = new THREE.PointsMaterial({ 
@@ -111,8 +111,8 @@ function addProteinToScene( scene ) {
     setUnitLen();
 
     const sphere = getSpherePrimitive();
-    const particle0 = getParticlePrimitive( params.tex['0']);
-    const particle1 = getParticlePrimitive( params.tex['1']);
+    const particle0 = getParticlePrimitive( params.tex['0.png']);
+    const particle1 = getParticlePrimitive( params.tex['1.png']);
 
     // delete old protein if present
     for (let i=0; i < scene.children.length; i++) {

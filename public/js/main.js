@@ -56,7 +56,7 @@ function setControls() {
 function loadTextures() {    
     // set static textures
     for (let name in params.tex) {
-        params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}.png`);    
+        params.tex[name] = new THREE.TextureLoader().load(`imgs/${name}`);    
     }
 }
 
