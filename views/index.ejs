@@ -37,7 +37,7 @@
     </div>
     
     <div id="gui" class="gui-box">
-        <div id="prot-scale" class="gui-box">
+        <div id="scale-stuff" class="gui-box">
             <p><b>Scale</b></p>
             <label for="scale" id="scale-lbl">Scale:</label>
             <input type="range" min="0.1" max="10" step="0.1" value="4" id="scale" name="scale">            
@@ -60,7 +60,7 @@
             <label for="rot-z" id="rot-z-lbl">Z:</label>
             <input type="range" min="-180" max="180" step="1" value="0" id="rot-z" name="rot-z">
         </div>
-        <div id="helix-width" class="gui-box">
+        <div id="helix-stuff" class="gui-box">
             <p><b>Helix</b></p>
             <label for="num-strands" id="num-strands-lbl">Number of Strands</label>
             <input type="range" min="1" max="2" step="1" value="1" id="num-strands" name="num-strands">
@@ -68,6 +68,14 @@
             <input type="range" min="0.1" max="2" step="0.05" value="0.5" id="rad-strand" name="rad-strand">
             <label for="particle-size" id="particle-size-lbl">Particle Size</label>
             <input type="range" min="0.01" max="0.05" step="0.001" value="0.017" id="particle-size" name="particle-size">
+        </div>
+        <div id="speed-stuff" class="gui-box">
+            <p><b>Speed</b></p>            
+            <label for="speed" id="speed-lbl">Speed</label>
+            <input type="range" min="1" max="5" step="1" value="4" id="speed" name="speed">
+            <span>
+                Increase speed<br>to reduce shaking :(
+            </span>
         </div>
     </div>
 

@@ -3,8 +3,8 @@ function getGroundTexture() {
 }
 
 function getGrid() {
-    const size = 1000;
-    const divisions = 500;
+    const size = 750;
+    const divisions = size / 2;
     
     return new THREE.GridHelper( size, divisions, 0x49E6FF, 0x49E6FF );
 }

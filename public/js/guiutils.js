@@ -22,6 +22,9 @@ const numStrandsLbl = document.querySelector('#num-strands-lbl');
 const particleSizeRng = document.querySelector('#particle-size');
 const particleSizeLbl = document.querySelector('#particle-size-lbl');
 
+const speedRng = document.querySelector('#speed');
+const speedLbl = document.querySelector('#speed-lbl');
+
 const playBtn = document.querySelector('#button_start');
 const pauseBtn = document.querySelector('#button_stop');
 const restartBtn = document.querySelector('#button_restart');
@@ -113,6 +116,13 @@ particleSizeRng.addEventListener("input", () => {
 
     particleSizeLbl.innerText = `${particleSizeLbl.innerText.split(":")[0]}: ${val}`;
     addProteinToScene( scene );
+})
+
+speedRng.addEventListener("input", () => {
+    const val = parseInt(speedRng.value);
+    params.speed = val;
+
+    speedLbl.innerText = `${speedLbl.innerText.split(":")[0]}: ${val}`;
 })
 
 playBtn.addEventListener("click", () => {

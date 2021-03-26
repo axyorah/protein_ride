@@ -1,4 +1,5 @@
 const params = {
+    'speed': 4,
     'scale': 4,
     'xPos': 0.,
     'yPos': 0.,

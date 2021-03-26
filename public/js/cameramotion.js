@@ -2,10 +2,11 @@ class CameraMotion {
     constructor(camera, cameraControls) {
         this.camera = camera;
         this.cameraControls = cameraControls;
-        this.time = 0;
-        this.idx = 0;
-        this.on = false;
-
+        this.on = false;  // indicates whether we are currently going through the protein chain
+        this.time = 0;    // counts time [sec] from the moment the 'on' flag in toggled
+        this.frameCounter = 0; // counts all frames from the moment the 'on' flag is toggled
+        this.idx = 0;     // idx of current data pt in interpolated prot chain
+        
         this.skip = 2; // skip some clock ticks to regulate speed: the more are skipper - the slower the speed
 
         this.connecting = false;
@@ -89,25 +90,42 @@ class CameraMotion {
             return;
         }
 
-        //this.time += delta;  
+        //this.time += delta; 
+        this.skip = 6 - params.speed;
 
         if (this.connecting) {
             return this.connect(delta);
         }
 
-        if (!(this.idx % this.skip) && this.idx / this.skip < paths.helixCenters.length - 10) {
-            const i = this.idx / this.skip;  
+        // if (!(this.idx % this.skip) && this.counter < paths.helixCenters.length - 10) {
+        //     //const i = this.idx / this.skip;  
+        //     this.counter += 1;
             
-            const xyzPos = new THREE.Vector3(...paths.helixCenters[i])
+        //     const xyzPos = new THREE.Vector3(...paths.helixCenters[this.counter])
+        //         .multiplyScalar(params.scale)
+        //         .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+        //     const xyzTar = new THREE.Vector3(...paths.helixCenters[this.counter + 10])
+        //         .multiplyScalar(params.scale)
+        //         .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+
+        //     this.camera.position.set(xyzPos.x, xyzPos.y, xyzPos.z);
+        //     this.cameraControls.target.set(xyzTar.x, xyzTar.y, xyzTar.z);
+        // }
+        // this.idx += 1;
+
+        if (!(this.frameCounter % this.skip) && this.idx < paths.helixCenters.length - 11) {
+            this.idx += 1;
+            
+            const xyzPos = new THREE.Vector3(...paths.helixCenters[this.idx])
                 .multiplyScalar(params.scale)
                 .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
-            const xyzTar = new THREE.Vector3(...paths.helixCenters[i + 10])
+            const xyzTar = new THREE.Vector3(...paths.helixCenters[this.idx + 10])
                 .multiplyScalar(params.scale)
                 .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
 
             this.camera.position.set(xyzPos.x, xyzPos.y, xyzPos.z);
             this.cameraControls.target.set(xyzTar.x, xyzTar.y, xyzTar.z);
         }
-        this.idx += 1;
+        this.frameCounter += 1;
     }
 }
