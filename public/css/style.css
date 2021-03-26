@@ -70,7 +70,9 @@ input[type="file"] {
 #buttons {
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    width: 80px;
+    left: 50%;
+    margin-left: -40px;
 }
 
 #button_restart, #button_stop, #button_start {

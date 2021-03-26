@@ -9,16 +9,16 @@ class CameraMotion {
         this.time = 0;    // counts time [sec] from the moment the 'on' flag in toggled
         this.idx = 0;     // idx of current data pt in interpolated prot chain
         
-        this.skip = 2; // skip some data pts to regulate speed
+        this.skip = 2;    // skip some data pts to regulate speed
 
         this.connecting = false;
-        this.connectSpeed = 0.1; // [dist units / second]
-        this.connectTime = 0; // [second]
+        this.connectSpeed = 0.1;    // [dist units / second]
+        this.connectTime = 0;       // [second]
         this.connectDelta = 0.0001; // [dist units]
-        this.startPos = undefined; // Vector3
-        this.startTar = undefined; // Vector3
-        this.endPos = undefined; // Vector3
-        this.endTar = undefined; // Vector3
+        this.startPos = undefined;  // Vector3
+        this.startTar = undefined;  // Vector3
+        this.endPos = undefined;    // Vector3
+        this.endTar = undefined;    // Vector3
     }
 
     setConnectionEndpoint(position, target) {
@@ -48,7 +48,6 @@ class CameraMotion {
     }
 
     restart() {
-        console.log(this.pts[this.idx])
         this.on = true;        
         this.setConnectionEndpoint(
             this.pts[this.idx]
@@ -108,8 +107,6 @@ class CameraMotion {
                 .clone()
                 .multiplyScalar(params.scale)
                 .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
-
-            console.log(xyzPos)
 
             this.camera.position.set(xyzPos.x, xyzPos.y, xyzPos.z);
             this.cameraControls.target.set(xyzTar.x, xyzTar.y, xyzTar.z);
