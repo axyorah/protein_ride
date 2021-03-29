@@ -10,6 +10,7 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/node_modules/three'));
 
 // --- ROUTES ---
 app.get('/', (req,res) => {
