@@ -5,6 +5,13 @@ class CameraMotion {
         this.numPts = numPts === undefined ? 5 * pts.length : numPts;
         this.pts = new THREE.CatmullRomCurve3(pts).getPoints(this.numPts);
 
+        // this is only valid if scale and position are not changed via gui!!!
+        for (let i=0; i < this.pts.length; i++) {
+            this.pts[i]
+                .multiplyScalar(params.scale)
+                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+        }
+
         this.on = false;  // indicates whether we are currently going through the protein chain
         this.time = 0;    // counts time [sec] from the moment the 'on' flag in toggled
         this.idx = 0;     // idx of current data pt in interpolated prot chain
@@ -32,13 +39,14 @@ class CameraMotion {
         this.time = 0;
         this.setConnectionEndpoint(
             this.pts[0]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)), 
+                // .clone() // uncomment if scale and position can be changed bia gui!!!
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                , 
             this.pts[10]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                // .clone()
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
         );
         this.connect(clock.getDelta());
     }
@@ -51,13 +59,14 @@ class CameraMotion {
         this.on = true;        
         this.setConnectionEndpoint(
             this.pts[this.idx]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos)), 
+                // .clone() // uncomment if scale and position can be changed bia gui!!!
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                , 
             this.pts[this.idx + 10]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                // .clone()
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
         );
         this.connect(clock.getDelta());
     }
@@ -100,13 +109,15 @@ class CameraMotion {
 
             //TODO: when scale/position/rotation is fixed - remove all on-the-fly coord adjustment
             const xyzPos = this.pts[this.idx]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+                // .clone() // uncomment if scale and position can be changed bia gui!!!
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                ;
             const xyzTar = this.pts[this.idx + 10]
-                .clone()
-                .multiplyScalar(params.scale)
-                .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos));
+                // .clone() // uncomment if scale and position can be changed bia gui!!!
+                // .multiplyScalar(params.scale)
+                // .add(new THREE.Vector3(params.xPos, params.yPos, params.zPos))
+                ;
 
             this.camera.position.set(xyzPos.x, xyzPos.y, xyzPos.z);
             this.cameraControls.target.set(xyzTar.x, xyzTar.y, xyzTar.z);
