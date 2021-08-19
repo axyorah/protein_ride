@@ -13,8 +13,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules/three'));
 
 // --- ROUTES ---
-app.get('/', (req,res) => {
-    res.render('index.ejs');
+app.get('/protein', (req,res) => {
+    res.render('protein.ejs');
 });
 
 const port = process.env.PORT || 3000;
