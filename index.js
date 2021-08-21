@@ -17,6 +17,10 @@ app.get('/protein', (req,res) => {
     res.render('protein.ejs');
 });
 
+app.get('/present', (req,res) => {
+    res.render('present.ejs');
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`LISTENING ON PORT ${port}`);
