@@ -107,7 +107,6 @@ class CameraMotion {
         if (this.idx + this.skip < this.pts.length - 10) {            
             this.idx += this.skip;
 
-            //TODO: when scale/position/rotation is fixed - remove all on-the-fly coord adjustment
             const xyzPos = this.pts[this.idx]
                 // .clone() // uncomment if scale and position can be changed bia gui!!!
                 // .multiplyScalar(params.scale)
