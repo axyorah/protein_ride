@@ -118,7 +118,7 @@ window.addEventListener('resize', () => {
 // run all
 function main() {
     init();      // sets up camera, controls and renderer, as well as preloads all textures
-    fillScene(); // lights and shell are added here
+    fillScene(); // lights, skybox, ground, and objects are added here
     addToDOM();  // adds rendered scene back to html
     animate();   // updates frames when camera changes position or controls are toggled    
 }
